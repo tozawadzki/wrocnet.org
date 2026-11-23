@@ -164,8 +164,21 @@ permalink: /assets/offer/Oferta-WrocNET.html
     <h2>O nas</h2>
     <p>Jesteśmy społecznością skupioną wokół <span class="hl">technologii i&nbsp;produktów Microsoft</span>. Spotykamy się we Wrocławiu od <span class="hl">prawie 20&nbsp;lat</span>; pierwsze spotkanie odbyło się w&nbsp;listopadzie 2007 roku.</p>
     <p>Nie ograniczamy się do .NET. Rozmawiamy o&nbsp;chmurze, AI, architekturze i&nbsp;pracy w&nbsp;zespole, dlatego przychodzą do nas <span class="hl">programiści różnych technologii</span>. Spotkania odbywają się co miesiąc i&nbsp;są zawsze bezpłatne.</p>
+    {%- comment -%} The offer goes out ahead of time, so it also counts the next scheduled meeting. {%- endcomment -%}
+    {%- assign offer_meeting_count = meeting_count %}
+    {%- for post in site.posts reversed %}
+      {%- if post.date > site.time %}{% if post.tags contains 'offline' or post.tags contains 'online' %}
+        {%- assign offer_meeting_count = post.path | split: '/' | last | split: '-' | slice: 3 | first | plus: 0 %}
+        {%- break %}
+      {%- endif %}{% endif %}
+    {%- endfor %}
+    {%- assign meetings_mod10 = offer_meeting_count | modulo: 10 %}
+    {%- assign meetings_mod100 = offer_meeting_count | modulo: 100 %}
+    {%- assign meetings_noun = "spotkań" %}
+    {%- if meetings_mod10 >= 2 and meetings_mod10 <= 4 %}{% assign meetings_noun = "spotkania" %}{% endif %}
+    {%- if meetings_mod100 >= 12 and meetings_mod100 <= 14 %}{% assign meetings_noun = "spotkań" %}{% endif %}
     <div class="stats">
-      <div class="stat"><div class="num">{{ meeting_count }}</div><div class="lbl">spotkań</div></div>
+      <div class="stat"><div class="num">{{ offer_meeting_count }}</div><div class="lbl">{{ meetings_noun }}</div></div>
       <div class="stat"><div class="num">2400+</div><div class="lbl">zapisanych gości</div></div>
       <div class="stat"><div class="num">300+</div><div class="lbl">prelekcji</div></div>
     </div>
